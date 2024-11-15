@@ -7,7 +7,9 @@ node_modules
 package-lock.json
 
 # build
+main.js
 *.js.map
 
 # obsidian
 data.json
+manifest.json

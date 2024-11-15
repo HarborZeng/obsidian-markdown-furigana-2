@@ -1,9 +1,0 @@
-{
-    "author": "HarborZeng",
-    "authorUrl": "https://tellyouwhat.cn",
-    "id": "obsidian-markdown-furigana-2",
-    "name": "obsidian markdown furigana 2",
-    "description": "Simple markdown to furigana rendering plugin for displaying Japanese text with furigana in Obsidian (https://obsidian.md) implemented using another syntax.",
-    "isDesktopOnly": false,
-    "version": "1.0"
-}
