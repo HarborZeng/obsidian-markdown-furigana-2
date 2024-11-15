@@ -1,6 +1,6 @@
 ## Markdown Furigana Plugin 2 (Obsidian)
 
-Simple markdown to furigana rendering plugin for displaying Japanese text with [furigana](https://en.wikipedia.org/wiki/Furigana) in Obsidian (https://obsidian.md) implements using another syntax.
+Simple markdown to furigana rendering plugin for displaying Japanese text with [furigana](https://en.wikipedia.org/wiki/Furigana) in Obsidian (https://obsidian.md) implemented using another syntax.
 
 ### Examples
 
