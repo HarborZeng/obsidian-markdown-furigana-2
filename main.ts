@@ -3,7 +3,7 @@ import { RangeSetBuilder } from "@codemirror/state"
 import { ViewPlugin, WidgetType, EditorView, ViewUpdate, Decoration, DecorationSet } from '@codemirror/view'
 
 // Regular Expression for {{kanji|kana|kana|...}} format
-const REGEXP = /\[([^]]+)]\^\(([^)]+)\)/gm;
+const REGEXP = /\[([^\]]+)\]\^\(([^)]+)\)/g;
 
 // Main Tags to search for Furigana Syntax
 const TAGS = 'p, h1, h2, h3, h4, h5, h6, ol, ul, table'
@@ -12,21 +12,17 @@ const convertFurigana = (element: Text): Node => {
   const matches = Array.from(element.textContent.matchAll(REGEXP))
   let lastNode = element
   for (const match of matches) {
-    const furi = match[2].split('|').slice(1) // First Element will be empty
-    const kanji = furi.length === 1 ? [match[1]] : match[1].split('')
-    if (kanji.length === furi.length) {
-      // Number of Characters in first section must be equal to number of furigana sections (unless only one furigana section)
-      const rubyNode = document.createElement('ruby')
-      rubyNode.addClass('furi')
-      kanji.forEach((k, i) => {
-        rubyNode.appendText(k)
-        rubyNode.createEl('rt', { text: furi[i] })
-      })
-      let offset = lastNode.textContent.indexOf(match[0])
-      const nodeToReplace = lastNode.splitText(offset)
-      lastNode = nodeToReplace.splitText(match[0].length)
-      nodeToReplace.replaceWith(rubyNode)
-    }
+    const furi = match?.[2]
+    const kanji = match?.[1]
+
+    const rubyNode = document.createElement('ruby')
+    rubyNode.addClass('furi')
+    rubyNode.appendText(kanji)
+    rubyNode.createEl('rt', { text: furi })
+    let offset = lastNode.textContent.indexOf(match[0])
+    const nodeToReplace = lastNode.splitText(offset)
+    lastNode = nodeToReplace.splitText(match[0].length)
+    nodeToReplace.replaceWith(rubyNode)
   }
   return element
 }
@@ -69,16 +65,14 @@ export default class MarkdownFurigana extends Plugin {
 }
 
 class RubyWidget extends WidgetType {
-  constructor(readonly kanji: string[], readonly furi: string[]) {
+  constructor(readonly kanji: string, readonly furi: string) {
     super()
   }
 
   toDOM(view: EditorView): HTMLElement {
     let ruby = document.createElement("ruby")
-    this.kanji.forEach((k, i) => {
-      ruby.appendText(k)
-      ruby.createEl("rt", { text: this.furi[i] })
-    })
+    ruby.appendText(this.kanji)
+    ruby.createEl("rt", { text: this.furi })
     return ruby
   }
 }
@@ -130,8 +124,8 @@ const viewPlugin = ViewPlugin.fromClass(class {
       let matches = Array.from(line.text.matchAll(REGEXP))
       for (const match of matches) {
         let add = true
-        const furi = match[2].split("|").slice(1)
-        const kanji = furi.length === 1 ? [match[1]] : match[1].split("")
+        const furi = match?.[2]
+        const kanji = match?.[1]
         const from = match.index != undefined ? match.index + line.from : -1
         const to = from + match[0].length
         currentSelections.forEach((r) => {
