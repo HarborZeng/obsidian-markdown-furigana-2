@@ -3,7 +3,7 @@ import { RangeSetBuilder } from "@codemirror/state"
 import { ViewPlugin, WidgetType, EditorView, ViewUpdate, Decoration, DecorationSet } from '@codemirror/view'
 
 // Regular Expression for {{kanji|kana|kana|...}} format
-const REGEXP = /\[([^\]]+)\]\^\(([^)]+)\)/g;
+const REGEXP = /\[(?=[^[])(.*?)]\^\((.*?)\)/g
 
 // Main Tags to search for Furigana Syntax
 const TAGS = 'p, h1, h2, h3, h4, h5, h6, ol, ul, table'
